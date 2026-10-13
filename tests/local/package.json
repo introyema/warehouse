@@ -1,0 +1,8 @@
+{
+  "name": "shovyshche-local-rls-test",
+  "private": true,
+  "type": "module",
+  "description": "Локальна перевірка SQL-міграцій і RLS у вбудованому PostgreSQL (PGlite). Необов'язкова.",
+  "scripts": { "test": "node run.mjs" },
+  "dependencies": { "@electric-sql/pglite": "0.2.17" }
+}

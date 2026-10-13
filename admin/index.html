@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Адмін-панель — Сховище</title>
+  <meta name="theme-color" content="#0f1220">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236c5ce7'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle' fill='white' font-family='sans-serif'%3EС%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin">
+  <header class="site-header">
+    <div class="container header-inner">
+      <span class="brand"><span class="brand-mark" aria-hidden="true">С</span><span>Сховище · Адмін-панель</span></span>
+      <nav class="nav" aria-label="Розділи адмін-панелі" id="admin-nav" hidden>
+        <a href="#/" data-nav="home">Головна</a>
+        <a href="#/projects" data-nav="projects">Проєкти</a>
+        <a href="#/new" data-nav="new">Додати проєкт</a>
+        <span class="admin-user" id="admin-user"></span>
+        <button type="button" class="btn btn-ghost btn-sm" id="logout-btn">Вийти</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1" class="container admin-main">
+    <noscript><p class="panel">Для роботи адмін-панелі потрібен увімкнений JavaScript.</p></noscript>
+
+    <section id="view-loading" class="panel"><p>Завантаження…</p></section>
+
+    <section id="view-noconfig" class="panel" hidden>
+      <h1>Адмін-панель ще не налаштована</h1>
+      <p>У файлі <code>data/supabase-config.js</code> не вказано параметри Supabase. Виконайте кроки з файлу <code>ADMIN_SETUP.md</code>.</p>
+    </section>
+
+    <section id="view-login" class="panel login" hidden aria-labelledby="login-title">
+      <h1 id="login-title">Вхід для адміністратора</h1>
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="login-email">Електронна пошта</label>
+          <input type="email" id="login-email" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Пароль</label>
+          <input type="password" id="login-password" autocomplete="current-password" required>
+        </div>
+        <p class="form-error" id="login-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary" id="login-submit">Увійти</button>
+      </form>
+    </section>
+
+    <section id="view-denied" class="panel" hidden>
+      <h1>Немає доступу</h1>
+      <p>Ви увійшли як <strong id="denied-email"></strong>, але цей обліковий запис не має прав адміністратора «Сховища». Змінювати контент може лише адміністратор.</p>
+      <button type="button" class="btn btn-ghost" id="denied-logout">Вийти</button>
+    </section>
+
+    <section id="view-app" hidden>
+      <div id="app-content"></div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <dialog id="confirm-dialog" class="modal" aria-labelledby="confirm-title">
+    <h2 id="confirm-title">Підтвердження</h2>
+    <p id="confirm-text"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="confirm-no">Скасувати</button>
+      <button type="button" class="btn btn-danger" id="confirm-yes">Підтвердити</button>
+    </div>
+  </dialog>
+
+  <dialog id="preview-dialog" class="modal modal-wide" aria-labelledby="preview-title">
+    <div class="modal-head">
+      <h2 id="preview-title">Попередній перегляд</h2>
+      <button type="button" class="btn btn-ghost btn-sm" id="preview-close">Закрити</button>
+    </div>
+    <p class="note" id="preview-note"></p>
+    <div class="tabs" role="tablist">
+      <button type="button" class="chip" role="tab" id="tab-card" aria-pressed="true">Картка в каталозі</button>
+      <button type="button" class="chip" role="tab" id="tab-page" aria-pressed="false">Сторінка проєкту</button>
+    </div>
+    <div id="preview-body"></div>
+  </dialog>
+
+  <dialog id="lightbox" class="lightbox" aria-label="Перегляд скриншота">
+    <figure>
+      <img id="lightbox-img" src="" alt="">
+      <figcaption id="lightbox-caption"></figcaption>
+    </figure>
+    <div class="lightbox-bar">
+      <button type="button" class="btn btn-ghost btn-sm" id="lb-prev">← Попередній</button>
+      <span id="lb-count" aria-live="polite"></span>
+      <button type="button" class="btn btn-ghost btn-sm" id="lb-next">Наступний →</button>
+      <button type="button" class="btn btn-primary btn-sm" id="lb-close">Закрити</button>
+    </div>
+  </dialog>
+
+  <script src="../data/supabase-config.js"></script>
+  <script src="../js/view.js"></script>
+  <script src="supabase-lite.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
